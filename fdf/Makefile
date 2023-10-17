@@ -6,37 +6,33 @@
 #    By: ohortal- <ohortal-@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/27 12:33:36 by ohortal-          #+#    #+#              #
-#    Updated: 2023/10/03 13:59:02 by ohortal-         ###   ########.fr        #
+#    Updated: 2023/10/17 12:52:09 by ohortal-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= fdf
+NAME := fdf
 
-SRCS= events.c utils.c draw.c fdf.c read_file.c
+CC := gcc
 
-OBJ= $(SRCS:.c=.o)
+CFLAGS := -Wall -Wextra -Werror -Iheaders/
 
-CFLAGS= -Wall -Werror -Wextra
-LDFLAGS= -L./libft -L./minilibx_macos
-LDLIBS= -lft -lmlx
+SOURCE := source/*.c
+LIBFT := libft/*.c
+LIBRARY := -Lminilibx_macos -lmlx -framework OpenGL -framework AppKit
+MINILIBX := minilibx_macos/
 
-FARMEWORKS= -framework OpenGL -framework AppKit
+all: 
+	make -C $(MINILIBX)	
+	make -C ./libft
+	$(CC) $(CFLAGS) $(SOURCE) $(LIBFT) $(LIBRARY) -o $(NAME)
 
-$(NAME): $(OBJ)
-	make -sC ./libft
-	make -sC ./minilibx_macos
-	gcc $(CFLAGS) $(LDFLAGS) $(OBJ) $(LDLIBS) $(FRAMEWORKS) -o $(NAME)
+clean :
+	make -sC ./libft clean
+	make -sC ./minilibx_macos clean
+	rm -rf $(NAME)
 
-all: $(name)
+fclean: clean
 
 re: fclean all
-
-clean:
-	@rm -rf $(OBJ)
-	@make -sC ./libft clean
-	@make -sC ./minilibx_macos clean
-
-fclean:
-	@rm -rf $(NAME)
 
 .PHONY: all clean re fclean
